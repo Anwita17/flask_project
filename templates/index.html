@@ -31,7 +31,8 @@
             background-attachment: fixed;
 
         }
-        #text{
+
+        #text {
             text-align: right;
             color: white;
             padding: 5%;
@@ -44,7 +45,7 @@
         }
 
         .btn-primary:hover {
-           background-color: black;
+            background-color: black;
         }
 
         /* .card-img-top {
@@ -52,12 +53,21 @@
     height: 15vw;
     object-fit: cover;
 } */
+        .card {
+            width: 16rem;
+            height: 16rem;
+        }
+
+        .card:hover {
+            box-shadow: 10px 10px grey;
+        }
     </style>
     <div class="container-fluid" style="padding:2%; margin:5px;">
         <div class="row ">
             <div class="col-sm-4 d-flex justify-content-center ">
-                <div class="card" style="width: 18rem;">
-                    <img src="static/details_bg.png" class="card-img-top" alt="...">
+                <div class="card">
+                    <img src="static/details_bg.png" class="card-img-top" alt="..."
+                        style="height: 12rem;width: 12rem; align-self: center;">
                     <div class="card-body">
                         <!-- <h5 class="card-title">View Details</h5>
                         <p class="card-text">View monthly details of assigned and completed work of employees</p> -->
@@ -66,8 +76,9 @@
                 </div>
             </div>
             <div class="col-sm-4 d-flex justify-content-center ">
-                <div class="card" style="width: 18rem;">
-                    <img src="static/upload_bg.jpg" class="card-img-top" alt="...">
+                <div class="card">
+                    <img src="static/upload_bg.jpg" class="card-img-top" alt="..."
+                        style="height: 12rem;width: 12rem; align-self: center;">
                     <div class="card-body">
                         <!-- <h5 class="card-title">Upload File</h5>
                         <p class="card-text">Upload monthly excel file</p> -->
@@ -76,12 +87,13 @@
                 </div>
             </div>
             <div class="col-sm-4 d-flex justify-content-center">
-                <div class="card" style="width: 18rem;">
-                    <img src="static/mail_bg.png" class="card-img-top" alt="...">
+                <div class="card">
+                    <img src="static/mail_bg.png" class="card-img-top" alt="..."
+                        style="height: 12rem; width: 12rem; align-self: center;">
                     <div class="card-body">
                         <!-- <h5 class="card-title">Send Email</h5>
                         <p class="card-text">Share details of employees</p> -->
-                        <a href="#" class="btn btn-primary">Send Email</a>
+                        <a href="send_mail" class="btn btn-primary">Send Email</a>
                     </div>
                 </div>
             </div>
