@@ -16,7 +16,6 @@ def details():
 def upload():
     return render_template("upload.html")
 
-
 @app.route('/send_mail')
 def send_mail():
     return render_template("send_mail.html")
