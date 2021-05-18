@@ -5,26 +5,28 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div id="mail" class="container tab-pane active"><br>
+            <form  action="/" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Receiver's Email</label>
-                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                <input name="email" type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlText1" class="form-label">Subject</label>
-                <input type="text" class="form-control" id="exampleFormControlText1"
+                <input name="subject" type="text" class="form-control" id="exampleFormControlText1"
                     placeholder="January's Patching Count Details">
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Body</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <textarea name="body" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
             <div class="mb-3">
                 <label for="formFile" class="form-label">Default file input example</label>
-                <input class="form-control" type="file" id="formFile">
+                <input name="finput" class="form-control" type="file" id="formFile">
             </div>
             <div class="d-grid gap-2 col-4 mx-auto">
-                <button type="button" class="btn btn-outline-primary">Send Email</button>
+                <button type="submit" class="btn btn-outline-primary" name="sm">Send Email</button>
             </div>
+        </form>
 
         </div>
 
