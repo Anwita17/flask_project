@@ -1,44 +1,111 @@
 {% extends 'base.html' %}
 {%block title%} View Details {%endblock%}
 {% block body %}
-   
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div id="view" class="container tab-pane active"><br>
-            <div class="md-3">
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div id="view" class="container tab-pane active"><br>
+        <div class="md-3">
+            <form action="/view_details" method="POST">
                 <label for="months" style="margin-right: 3%;">Select a month</label>
-                <select name="month" style="height: 5vh; width: 60%; border-radius: 10px;">
-                    <option value="jan">January</option>
-                    <option value="feb">February</option>
-                    <option value="mar">March</option>
-                    <option value="apr">April</option>
-                    <option value="may">May</option>
-                    <option value="jun">June</option>
-                    <option value="jul">July</option>
-                    <option value="aug">August</option>
-                    <option value="sep">September</option>
-                    <option value="oct">October</option>
-                    <option value="nov">November</option>
-                    <option value="dec">December</option>
-                </select>
+                <!-- <select name="month" style="height: 5vh; width: 60%; border-radius: 10px;" required>
+                    <option value="">Choose a month</option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                </select> -->
+                <input type="month" name="month" style="height: 5vh;width: 50%; border-radius: 10px;" />
+                <button class="btn btn-primary" name="data" type="submit"
+                    style="background-color: #000066; margin: 2%; border-radius: 10px;">Show Data</button>
+                <button class="btn btn-primary" name="charts" type="submit"
+                    style="background-color: #000066; margin: 2%; border-radius: 10px;">Show Chart</button>
+            </form>
 
-                    <button class="btn btn-primary" type="button" style="background-color: #000066; margin: 2%; border-radius: 10px;">Show Chart</button>
-            </div>
+            {% if details %}
+            {% if not details.first() %}
+            <div class="alert alert-danger" role="alert"><strong>No data has been uploaded for {{month}}</strong></div>
+
+            {% else %}
+            <br><br>
+            <div><strong>Patching Details for the month of <span style="color:green;">{{month}}</span> has been displayed:</strong></div>
+            <br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"> </th>
+                        <th scope="col" colspan="3" style="padding-left:10%;">12C Clusters</th>
+                        <th scope="col" colspan="3" style="padding-left:10%;">12C Restarts</th>
+                        <th scope="col" colspan="3" style="padding-left:10%;">Total</th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <th scope="col">DBA</th>
+                        <th scope="col">Assigned</th>
+                        <th scope="col">Completed</th>
+                        <th scope="col">Remaining</th>
+                        <th scope="col">Assigned</th>
+                        <th scope="col">Completed</th>
+                        <th scope="col">Remaining</th>
+                        <th scope="col">Assigned</th>
+                        <th scope="col">Completed</th>
+                        <th scope="col">Remaining</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in details %}
+                    <tr>
+                        <td>{{value.dba}}</td>
+                        <td>{{value.cluster_assigned_12c}}</td>
+                        <td>{{value.cluster_completed_12c}}</td>
+                        <td>{{value.cluster_rem_12c}}</td>
+                        <td>{{value.restart_assigned_12c}}</td>
+                        <td>{{value.restart_completed_12c}}</td>
+                        <td>{{value.restart_rem_12c}}</td>
+                        <td>{{value.total_assigned}}</td>
+                        <td>{{value.total_completed}}</td>
+                        <td>{{value.total_rem}}</td>
+                    </tr>
+                    
+                    {% endfor %}
+                    <tr>
+                        <th colspan="7" style="text-align: right; padding-right:8%">Total</th>
+                        <th>{{assigned}}</th>
+                        <th>{{completed}}</th>
+                        <th>{{remaining}}</th>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% else %}
+            <div class="alert alert-secondary" role="alert"><strong>No month selected to display. Please choose a month!</strong></div>
+
+            {% endif %}
         </div>
-
     </div>
 
+</div>
 
-    <!-- Optional JavaScript; choose one of the two! -->
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
-        crossorigin="anonymous"></script>
+<!-- Optional JavaScript; choose one of the two! -->
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+    crossorigin="anonymous"></script>
+
+<!-- Option 2: Separate Popper and Bootstrap JS -->
+<!--
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js" integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ" crossorigin="anonymous"></script>
     -->
-    {% endblock body %}
+{% endblock body %}
