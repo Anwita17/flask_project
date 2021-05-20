@@ -32,18 +32,18 @@ class User(db.Model):
     dba = db.Column(db.String(80))
     cluster_assigned_12c= db.Column(db.Integer)
     cluster_completed_12c= db.Column(db.Integer)
-    #cluster_rem_12c= db.Column(db.Integer)
+    cluster_rem_12c= db.Column(db.Integer)
     restart_assigned_12c= db.Column(db.Integer)
     restart_completed_12c= db.Column(db.Integer)
-    #restart_rem_12c= db.Column(db.Integer)
+    restart_rem_12c= db.Column(db.Integer)
     total_assigned= db.Column(db.Integer)
-    #total_rem= db.Column(db.Integer)
     total_completed= db.Column(db.Integer)
+    total_rem= db.Column(db.Integer)
     month=db.Column(db.String(80))
     year=db.Column(db.Integer)
     
     def __repr__(self) -> str:
-        return f"{self.dba}-{self.cluster_assigned_12c}"
+        return f"{self.sno}-{self.dba}-{self.cluster_assigned_12c}-{self.cluster_completed_12c}-{self.restart_assigned_12c}-{self.restart_completed_12c}-{self.total_assigned}-{self.total_completed}"
 
 def snd_mail():
     file=request.files['finput']
@@ -78,14 +78,18 @@ def upload_file():
         for ind in df.index:
             # print(df["DBA_Name"][ind])
             user = User(dba=df["DBA_Name"][ind], cluster_assigned_12c=df["12c_clusters_assigned"][ind],cluster_completed_12c=df["12c_clusters_completed"][ind],
-            restart_assigned_12c=df["12c_restarts_assigned"][ind],restart_completed_12c=df["12c_restarts_completed"][ind],total_assigned=df["total_assigned"][ind],
-            total_completed=df["total_completed"][ind],month=month_form,year=year_calc)
+            cluster_rem_12c=df["12c_clusters_assigned"][ind]-df["12c_clusters_completed"][ind],
+            restart_assigned_12c=df["12c_restarts_assigned"][ind],restart_completed_12c=df["12c_restarts_completed"][ind],
+            restart_rem_12c=df["12c_restarts_assigned"][ind]-df["12c_restarts_completed"][ind],
+            total_assigned=df["total_assigned"][ind],
+            total_completed=df["total_completed"][ind],total_rem=df["total_assigned"][ind]-df["total_completed"][ind],
+            month=month_form,year=year_calc)
             db.session.add(user)
             db.session.commit()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    print('ind')
+    #print('ind')
     if request.method == 'POST':
         print('0')
         if 'sm' in request.form: 
@@ -107,9 +111,26 @@ def index():
     return render_template("index.html")
 
 
-@app.route('/view_details')
+@app.route('/view_details',methods=['GET','POST'])
 def details():
-    return render_template("view_details.html")
+    month_ar=['January','February','March','April','May','June','July','August','September','October','November','December']
+    get_month=request.form.get('month')
+    if get_month!=None:
+        get_month=str(request.form.get('month'))
+        ar=get_month.split("-")
+        year=int(ar[0])
+        month=month_ar[int(ar[1])-1]
+        details=User.query.filter_by(month=month,year=year)
+        sum_a=0
+        sum_c=0
+        sum_r=0
+        for var in details:
+            sum_a=sum_a+var.total_assigned
+            sum_c=sum_c+var.total_completed
+            sum_r=sum_r+(var.total_assigned-var.total_completed)
+        return render_template("view_details.html",details=details,month=month,assigned=sum_a,completed=sum_c,remaining=sum_r)
+    else:
+        return render_template("view_details.html")
 
 
 @app.route('/upload',methods=['GET', 'POST'])

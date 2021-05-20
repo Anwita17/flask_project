@@ -4,14 +4,17 @@
 
     <!-- Tab panes -->
     <br><br>
-    <div class="alert alert-primary" role="alert">
-       <div style="text-align:center;">The data for  
-        {% for value in month %}
-            <strong>{{value}}</strong>
-        {% endfor %}
-        has been uploaded. Please avoid uploading repeated data.
-       </div>
-      </div>
+    
+        {% if month %}
+        <div class="alert alert-primary" role="alert">
+        <div style="text-align:center;">The data for  
+            {% for value in month %}
+                <strong>{{value}}</strong>
+            {% endfor %}
+            has been uploaded. Please avoid uploading repeated data.
+        </div>     
+    </div>
+        {% endif %}
     <div class="tab-content" style="margin-top: 10%;">
         <div id="mail" class="container tab-pane active"><br>
             
