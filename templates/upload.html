@@ -1,20 +1,15 @@
 {% extends 'base.html' %}
-{%block title%} Send Mail {%endblock%}
+{%block title%} Upload {%endblock%}
 {% block body %}
 
     <!-- Tab panes -->
     <br><br>
+    {% if msg %}
+    <div class="alert alert-danger" role="alert" style="text-align: center;">
+        <strong>{{msg}}</strong>
+      </div>    
+    {% endif %}
     
-        {% if month %}
-        <div class="alert alert-primary" role="alert">
-        <div style="text-align:center;">The data for  
-            {% for value in month %}
-                <strong>{{value}}</strong>
-            {% endfor %}
-            has been uploaded. Please avoid uploading repeated data.
-        </div>     
-    </div>
-        {% endif %}
     <div class="tab-content" style="margin-top: 10%;">
         <div id="mail" class="container tab-pane active"><br>
             
@@ -22,26 +17,14 @@
                 <div class="mb-3">
                     
                     
-                    <div><label for="exampleFormControlText1" class="form-label">Enter the month fo which you want to upload the patching count:</label></div>
-                    <select name="month" style="height: 5vh;border-radius:10px;" required>
-                        <option value="">Choose month</option>
-                        <option value="January">January</option>
-                        <option value="February">February</option>
-                        <option value="March">March</option>
-                        <option value="April">April</option>
-                        <option value="May">May</option>
-                        <option value="June">June</option>
-                        <option value="July">July</option>
-                        <option value="August">August</option>
-                        <option value="September">September</option>
-                        <option value="October">October</option>
-                        <option value="November">November</option>
-                        <option value="December">December</option>
-                    </select>
+                    <div> <label for="months" style="margin-right: 3%;">Select a month:</label></div>
+                    <div>
+                        <input type="month" name="month" style="height: 5vh;width: 50%; border-radius: 10px;margin-top:1%;" required/>
+                    </div><br>
                 </div>
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Choose the file to upload:</label>
-                    <input class="form-control" name="file" type="file" id="formFile">
+                    <input class="form-control" name="file" type="file" id="formFile" required>
                 </div>
                 <div class="d-grid gap-2 col-4 mx-auto">
                     <button type="submit" class="btn btn-outline-primary" name="up"> Upload </button>
