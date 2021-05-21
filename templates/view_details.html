@@ -8,86 +8,180 @@
         <div class="md-3">
             <form action="/view_details" method="POST">
                 <label for="months" style="margin-right: 3%;">Select a month</label>
-                <!-- <select name="month" style="height: 5vh; width: 60%; border-radius: 10px;" required>
-                    <option value="">Choose a month</option>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April">April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
-                </select> -->
                 <input type="month" name="month" style="height: 5vh;width: 50%; border-radius: 10px;" />
                 <button class="btn btn-primary" name="data" type="submit"
                     style="background-color: #000066; margin: 2%; border-radius: 10px;">Show Data</button>
-                <button class="btn btn-primary" name="charts" type="submit"
-                    style="background-color: #000066; margin: 2%; border-radius: 10px;">Show Chart</button>
             </form>
-
             {% if details %}
             {% if not details.first() %}
             <div class="alert alert-danger" role="alert"><strong>No data has been uploaded for {{month}}</strong></div>
 
             {% else %}
             <br><br>
-            <div><strong>Patching Details for the month of <span style="color:green;">{{month}}</span> has been displayed:</strong></div>
+            <div class="col-md-12 text-right mb-3">
+                <!-- <button class="btn btn-primary" id="download"><i class="fa fa-download"></i> Download Report</button> -->
+                <button type="button" class="btn btn-outline-danger" id="download">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-download" viewBox="0 0 16 16">
+                        <path
+                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                        <path
+                            d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                    </svg>
+                    Download Report
+                </button>
+            </div>
+            <div id="report">
+            <div><strong>Patching Details for the month of <span style="color:green;">{{month}}, {{year}}</span> has
+                    been displayed:</strong></div>
             <br>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col"> </th>
-                        <th scope="col" colspan="3" style="padding-left:10%;">12C Clusters</th>
-                        <th scope="col" colspan="3" style="padding-left:10%;">12C Restarts</th>
-                        <th scope="col" colspan="3" style="padding-left:10%;">Total</th>
-                    </tr>
-                </thead>
-                <thead>
-                    <tr>
-                        <th scope="col">DBA</th>
-                        <th scope="col">Assigned</th>
-                        <th scope="col">Completed</th>
-                        <th scope="col">Remaining</th>
-                        <th scope="col">Assigned</th>
-                        <th scope="col">Completed</th>
-                        <th scope="col">Remaining</th>
-                        <th scope="col">Assigned</th>
-                        <th scope="col">Completed</th>
-                        <th scope="col">Remaining</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for value in details %}
-                    <tr>
-                        <td>{{value.dba}}</td>
-                        <td>{{value.cluster_assigned_12c}}</td>
-                        <td>{{value.cluster_completed_12c}}</td>
-                        <td>{{value.cluster_rem_12c}}</td>
-                        <td>{{value.restart_assigned_12c}}</td>
-                        <td>{{value.restart_completed_12c}}</td>
-                        <td>{{value.restart_rem_12c}}</td>
-                        <td>{{value.total_assigned}}</td>
-                        <td>{{value.total_completed}}</td>
-                        <td>{{value.total_rem}}</td>
-                    </tr>
-                    
-                    {% endfor %}
-                    <tr>
-                        <th colspan="7" style="text-align: right; padding-right:8%">Total</th>
-                        <th>{{assigned}}</th>
-                        <th>{{completed}}</th>
-                        <th>{{remaining}}</th>
-                    </tr>
-                </tbody>
-            </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"> </th>
+                            <th scope="col" colspan="3" style="padding-left:10%;">12C Clusters</th>
+                            <th scope="col" colspan="3" style="padding-left:10%;">12C Restarts</th>
+                            <th scope="col" colspan="3" style="padding-left:10%;">Total</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th scope="col">DBA</th>
+                            <th scope="col">Assigned</th>
+                            <th scope="col">Completed</th>
+                            <th scope="col">Remaining</th>
+                            <th scope="col">Assigned</th>
+                            <th scope="col">Completed</th>
+                            <th scope="col">Remaining</th>
+                            <th scope="col">Assigned</th>
+                            <th scope="col">Completed</th>
+                            <th scope="col">Remaining</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for value in details %}
+                        <tr>
+                            <td>{{value.dba}}</td>
+                            <td>{{value.cluster_assigned_12c}}</td>
+                            <td>{{value.cluster_completed_12c}}</td>
+                            <td>{{value.cluster_rem_12c}}</td>
+                            <td>{{value.restart_assigned_12c}}</td>
+                            <td>{{value.restart_completed_12c}}</td>
+                            <td>{{value.restart_rem_12c}}</td>
+                            <td>{{value.total_assigned}}</td>
+                            <td>{{value.total_completed}}</td>
+                            <td>{{value.total_rem}}</td>
+                        </tr>
+
+                        {% endfor %}
+                        <tr>
+                            <th colspan="7" style="text-align: right; padding-right:8%">Total</th>
+                            <th>{{assigned}}</th>
+                            <th>{{completed}}</th>
+                            <th>{{remaining}}</th>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <canvas id='barChart' width="1300" height="400" style="display: none;"></canvas>
+            </div>
+            <div class="d-grid gap-2 col-4 mx-auto">
+                <button class="btn btn-outline-primary btn-lg" id="charts" type="submit" onclick="myFunction()">Show
+                    Chart</button>
+                <style>
+                    .btn-outline-primary {
+                        border-color: #000066;
+                        color: #000066;
+                        margin: 2%;
+                        border-radius: 10px;
+                    }
+
+                    .btn-outline-primary:hover {
+                        background-color: #000066;
+                    }
+
+                    #download {
+                        float: right;
+                    }
+                </style>
+            </div>
+
+            <!-- <div>Charts is showing</div> -->
+            <script>
+                function myFunction() {
+                    window.scrollTo(0, document.body.scrollHeight);
+                    var x = document.getElementById("barChart");
+                    if (x.style.display === "block") {
+                        x.style.display = "none";
+                        document.getElementById("charts").innerHTML = "Show Chart";
+                    } else {
+                        x.style.display = "block";
+                        document.getElementById("charts").innerHTML = "Hide Chart";
+                    }
+                }
+                //    document.getElementsByName("charts").style.visibility="hidden";
+                var ctx = document.getElementById("barChart").getContext("2d");
+                var barChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ vname | safe}},
+                datasets: [
+                    {
+                        label: 'Assigned',
+                        data: {{ vassigned | safe}},
+                    backgroundColor: "rgba(15, 15, 138,0.7)",
+                        
+                     },
+                    {
+                        label: 'Completed',
+                        data: {{ vcompleted | safe}},
+                    backgroundColor: "rgba(15, 15, 138,0.5)",
+
+                            },
+                    {
+                        label: 'Remaining',
+                        data: {{ vrem | safe}},
+                    backgroundColor: "rgba(15, 15, 138,0.2)",
+                        
+                            },
+                ]
+                },
+                options: {
+
+                    scales: {
+                        xAxes: [{
+                            stacked: true
+                        }],
+                            yAxes : [{
+                                stacked: true
+                            }]
+                    }
+
+                }
+                });
+                window.onload = function () {
+                    document.getElementById("download")
+                        .addEventListener("click", () => {
+                            const report = this.document.getElementById("report");
+                            console.log(report);
+                            console.log(window);
+                            var opt = {
+                                margin: 0.5,
+                                filename: "{{month | safe}}"+"-"+"{{year | safe}}"+'_pcount.pdf',
+                                image: { type: 'jpeg', quality: 1 },
+                                html2canvas: { scale: 5 },
+                                jsPDF: { unit: 'in', format: 'a2', orientation: 'portrait' }
+                            };
+                            html2pdf().from(report).set(opt).save();
+                        })
+                }
+            </script>
+
+
             {% endif %}
             {% else %}
-            <div class="alert alert-secondary" role="alert"><strong>No month selected to display. Please choose a month!</strong></div>
+            <div class="alert alert-secondary" role="alert"><strong>No month selected to display. Please choose a
+                    month!</strong></div>
 
             {% endif %}
         </div>
