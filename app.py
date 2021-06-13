@@ -47,67 +47,99 @@ class User(db.Model):
         return f"{self.sno}-{self.dba}-{self.cluster_assigned_12c}-{self.cluster_completed_12c}-{self.restart_assigned_12c}-{self.restart_completed_12c}-{self.total_assigned}-{self.total_completed}"
 
 def snd_mail():
-    file=request.files['finput']
-    if file:
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-    print('2')
-    print(request.form.get('subject'))
-    msg = Message(subject = request.form.get('subject'), body = request.form.get('body'), sender = "anonymousanwitashobhit@outlook.com", recipients = [request.form.get('email')])  
-    print('3')
+    comm_email=['gmail.com','outlook.com','yahoo.com','hotmail.com','rediff.com']
+    eid=str(request.form.get('email'))
+    edomain=eid.split('@')
+    try:
+        if edomain[1] not in comm_email:
+            
+            raise "email"
+        print(edomain[1])
+        file=request.files['finput']
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+        print(request.form.get('subject'))
+        msg = Message(subject = request.form.get('subject'), body = request.form.get('body'), sender = "anonymousanwitashobhit@outlook.com", recipients = [request.form.get('email')])  
 
-    with app.open_resource('Uploader/'+filename) as fp:  
-        msg.attach(filename,"application/vnd.ms-excel",fp.read())  
-    mail.send(msg)
+        with app.open_resource('Uploader/'+filename) as fp:  
+            msg.attach(filename,"application/vnd.ms-excel",fp.read())  
+        mail.send(msg)
+        return "index"
+    except:
+        return "email"
+    
+    
+    
+
 
 def upload_file():
-        xlsx_file = request.files['file']
-        data_xls = pd.read_excel(xlsx_file)
-        data_xls.columns=["DBA_Name","12c_clusters_assigned",
-        "12c_clusters_completed",
-        "12c_restarts_assigned"
-       ,"12c_restarts_completed"
-        ,"total_assigned"
-        ,"total_completed"]
-        dict1=data_xls.to_dict()
-        df=pd.DataFrame(dict1)
-        df.drop(0,inplace=True)
-        df.drop(df.tail(1).index,inplace=True)
-        df.reset_index(drop=True)
-        month_ar=['January','February','March','April','May','June','July','August','September','October','November','December']
-        get_month=str(request.form.get('month'))
-        ar=get_month.split("-")
-        year=int(ar[0])
-        month=month_ar[int(ar[1])-1]
-        for value in db.session.query(User.month,User.year).distinct():
-            if(month==value[0] and year==value[1]):
-                 return "upload"
+        try:
+            xlsx_file = request.files['file']
+            data_xls = pd.read_excel(xlsx_file,'Overview',usecols="A:G")
+            data_xls.columns=["DBA_Name","12c_clusters_assigned",
+            "12c_clusters_completed",
+            "12c_restarts_assigned"
+        ,"12c_restarts_completed"
+            ,"total_assigned"
+            ,"total_completed"]
+            dict1=data_xls.to_dict()
+            df=pd.DataFrame(dict1)
+            df.drop(0,inplace=True)
+            df.drop(df.tail(1).index,inplace=True)
+            df.reset_index(drop=True)
+            month_ar=['January','February','March','April','May','June','July','August','September','October','November','December']
+            get_month=str(request.form.get('month'))
+            ar=get_month.split("-")
+            year=int(ar[0])
+            month=month_ar[int(ar[1])-1]
+            for value in db.session.query(User.month,User.year).distinct():
+                if(month==value[0] and year==value[1]):
+                    return "upload"
 
-        # print(mon)
-        for ind in df.index:
-            user = User(dba=df["DBA_Name"][ind], cluster_assigned_12c=df["12c_clusters_assigned"][ind],cluster_completed_12c=df["12c_clusters_completed"][ind],
-            cluster_rem_12c=df["12c_clusters_assigned"][ind]-df["12c_clusters_completed"][ind],
-            restart_assigned_12c=df["12c_restarts_assigned"][ind],restart_completed_12c=df["12c_restarts_completed"][ind],
-            restart_rem_12c=df["12c_restarts_assigned"][ind]-df["12c_restarts_completed"][ind],
-            total_assigned=df["total_assigned"][ind],
-            total_completed=df["total_completed"][ind],total_rem=df["total_assigned"][ind]-df["total_completed"][ind],
-            month=month,year=year)
-            db.session.add(user)
-            db.session.commit()
-        return "index"
+
+            # print(mon)
+            for ind in df.index:
+                user = User(dba=df["DBA_Name"][ind], cluster_assigned_12c=df["12c_clusters_assigned"][ind],cluster_completed_12c=df["12c_clusters_completed"][ind],
+                cluster_rem_12c=df["12c_clusters_assigned"][ind]-df["12c_clusters_completed"][ind],
+                restart_assigned_12c=df["12c_restarts_assigned"][ind],restart_completed_12c=df["12c_restarts_completed"][ind],
+                restart_rem_12c=df["12c_restarts_assigned"][ind]-df["12c_restarts_completed"][ind],
+                total_assigned=df["total_assigned"][ind],
+                total_completed=df["total_completed"][ind],total_rem=df["total_assigned"][ind]-df["total_completed"][ind],
+                month=month,year=year)
+                db.session.add(user)
+                db.session.commit()
+            return "index"
+        except:
+            return "error"
+
+
+def login_user():
+    user=request.form.get('email')
+    password=request.form.get('pass')
+    print(user)
+    print(password)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    #print('ind')
+    #print('ind')/
     val="index"
     msg=""
     if request.method == 'POST':
         if 'sm' in request.form: 
-            snd_mail()
+            val=snd_mail()
+            if val=="email":
+                val="send_mail"
+                msg="Message cannot be delivered to this domain!"
         if 'up' in request.form:
             val=upload_file()
             if(val=="upload"):
                 msg="Sorry the file for this month already exists!"
+            if(val=="error"):
+                val="upload"
+                msg="Incorrect type of file uploaded. Please check and upload!"
+        if 'lu' in request.form:
+            val=login_user()
         
        
 
@@ -199,6 +231,32 @@ def send_mail():
     if request.method == 'POST':    
         return redirect(url_for('/'))
     return render_template("send_mail.html")
+
+@app.route('/login',methods=['GET','POST'])
+def login():
+    val="login"
+    msg=""
+    if request.method == 'POST':
+        print('0')
+        if 'rg' in request.form:    
+            user=request.form.get("email")
+            password=request.form.get("pass")
+            cpassword=request.form.get("cpass")
+            print(1)
+            if password != cpassword:
+                print(password)
+                val="register"
+                msg="Passwords do not match!"
+   
+        
+    return render_template(val+".html",msg=msg)
+
+@app.route('/register',methods=['GET','POST'])
+def register():
+    if request.method == 'POST':    
+        return redirect(url_for('/login'))
+    return render_template("register.html")
+
 
 
 if __name__ == "__main__":
