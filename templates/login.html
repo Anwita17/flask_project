@@ -14,23 +14,38 @@
 <body>
 
     <div id="particles-js">
-       
+
         <div id="container">
             <img class="logo" src="../static/logo.png">
             <form class='box' action="/" method="POST">
                 <div class="mb-3">
-                    <br><br><br><br>
+                    <br><br><br>
+                    {% if msg %}
+                    <div style="color: red; font-size: 20px;">{{msg}}</div>
+                    {% endif %}
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    <ul class=flashes>
+                        {% for message in messages %}
+                        <div style="font-size: 20px; color:red;">{{ message }}</div>
+
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% endwith %}
                     <label for="exampleInputEmail1" class="form-label" style="color: white; ">Email id</label>
-                    <input type="email"  name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <input required type="email" name="email" class="form-control" id="exampleInputEmail1"
+                        aria-describedby="emailHelp">
 
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label" style="color: white;">Password</label>
-                    <input type="password" name="pass" class="form-control" id="exampleInputPassword1">
+                    <input required type="password" name="pass" class="form-control" id="exampleInputPassword1">
                 </div>
                 <input type="submit" value="Sign In" name="lu"></input>
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label" style="color: white;">Don't have an account? <a href="register">Register</a></label>
+                    <label for="exampleInputPassword1" class="form-label" style="color: white;">Don't have an account?
+                        <a href="register">Register</a></label>
                 </div>
             </form>
         </div>
@@ -45,6 +60,16 @@
             padding: 0;
             height: 100vh;
             overflow: hidden;
+            background-image: url("../static/bg13.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
 
 
         }
@@ -83,9 +108,25 @@
             padding-bottom: 2%;
         }
 
+        @media screen and (max-width: 800px) {
+            #container {
+            height: 70%;
+            width: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            top: 20%;
+            border-radius: 20px;
+            padding-bottom: 2%;
+        }
+            
+        }
+
         .box input[type="email"]:focus,
         .box input[type="password"]:focus {
-            width: 350px;
+            width: 90%;
             border-color: #2ecc71;
         }
 
@@ -97,8 +138,8 @@
             margin: 20px auto;
             text-align: center;
             border: 2px solid #3498db;
-            padding: 14px 10px;
-            width: 200px;
+            padding: 8% 3%;
+            width: 80%;
             outline: none;
             color: white;
             border-radius: 24px;
@@ -109,10 +150,10 @@
             border: 0;
             background: none;
             display: block;
-            margin: 20px auto;
+            margin: 10% auto;
             text-align: center;
             border: 2px solid #2ecc71;
-            padding: 14px 40px;
+            padding: 3% 10%;
             outline: none;
             color: white;
             border-radius: 24px;
