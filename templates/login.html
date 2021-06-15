@@ -18,32 +18,32 @@
         <div id="container" >
             <img class="logo" src="../static/logo.png">
             <form class='box' action="/" method="POST">
-                <div class="mb-3">
+                <div >
                     <br><br><br>
                     {% if msg %}
-                    <div style="color: red; font-size: 20px;">{{msg}}</div>
+                    <div id="writ">{{msg}}</div>
                     {% endif %}
                     {% with messages = get_flashed_messages() %}
                     {% if messages %}
                     <ul class=flashes>
                         {% for message in messages %}
-                        <div style="font-size: 20px; color:red;">{{ message }}</div>
+                        <div id="writ" >{{ message }}</div>
 
                         {% endfor %}
                     </ul>
                     {% endif %}
                     {% endwith %}
-                    <label for="exampleInputEmail1" class="form-label" style="color: white; ">Email id</label>
+                    <label for="exampleInputEmail1" style="color: white; ">Email id</label>
                     <input required type="email" name="email" class="form-control" id="exampleInputEmail1"
                         aria-describedby="emailHelp">
 
                 </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label" style="color: white;">Password</label>
+                <div >
+                    <label for="exampleInputPassword1" style="color: white;">Password</label>
                     <input required type="password" name="pass" class="form-control" id="exampleInputPassword1">
                 </div>
                 <input type="submit" value="Sign In" name="lu"></input>
-                <div class="mb-3">
+                <div >
                     <label for="exampleInputPassword1" class="form-label" style="color: white;">Don't have an account?
                         <a href="register">Register</a></label>
                 </div>
@@ -55,236 +55,255 @@
     <!-- <script type="text/javascript" src="app.js"></script> -->
     <script src="{{url_for('static', filename='app.js')}}"></script>
     <style>
+        #writ{
+            color: tomato; 
+            font-size: 20px;
+        }
         body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            overflow: hidden;
-            background-image: url("../static/bg13.jpg");
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+           margin: 0;
+           padding: 0;
+           height: 100vh;
+           overflow: hidden;
+           background-image: url("../static/bg13.jpg");
+           background-repeat: no-repeat;
+           background-size: cover;
+           background-position: center;
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           text-align: center;
 
 
 
-        }
+       }
 
-        #particles-js {
-            /* height: 100%; */
-            /* background-color: #000000; */
-            /* background-image: linear-gradient(to right, #000046 , #1CB5E0); */
-            background-image: url("../static/bg13.jpg");
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            margin: 0;
-            padding: 0;
+       #particles-js {
+           /* height: 100%; */
+           /* background-color: #000000; */
+           /* background-image: linear-gradient(to right, #000046 , #1CB5E0); */
+           background-image: url("../static/bg13.jpg");
+           background-repeat: no-repeat;
+           background-size: cover;
+           background-position: center;
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           text-align: center;
+           margin: 0;
+           padding: 0;
 
-            /* padding: 0 20px; */
-            background-attachment: fixed;
+           /* padding: 0 20px; */
+           background-attachment: fixed;
 
-        }
+       }
 
-        #container {
-            height: 70%;
-            width: 30%;
-            background-color: rgba(255, 255, 255, 0.2);
-            align-items: center;
-            display: flex;
-            justify-content: center;
-            position: fixed;
-            top: 15%;
-            border-radius: 20px;
-            padding-bottom: 2%;
-            margin-bottom: 2%;
-        }
+       #container {
+           height: 70%;
+           width: 30%;
+           background-color: rgba(255, 255, 255, 0.2);
+           align-items: center;
+           display: flex;
+           justify-content: center;
+           position: fixed;
+           top: 15%;
+           border-radius: 20px;
+           padding-bottom: 2%;
+           margin-bottom: 2%;
+       }
 
-        @media screen and (max-width: 600px) {
-            #container {
-            height: 80%;
-            width: 50%;
-            background-color: rgba(255, 255, 255, 0.2);
-            align-items: center;
-            display: flex;
-            justify-content: center;
-            position: fixed;
-            top: 15%;
-            border-radius: 20px;
-            padding-bottom: 2%;
-            margin-bottom: 2%;
-        }
-        .box input[type="email"]:focus,
-        .box input[type="password"]:focus {
-            width: 90%;
-            border-color: #2ecc71;
-        }
-
-        .box input[type="email"],
-        .box input[type="password"] {
-            border: 0;
-            background: none;
-            display: block;
-            margin:5% ;
-            text-align: center;
-            border: 2px solid #3498db;
-            padding: 6% 2%;
-            width: 80%;
-            outline: none;
-            color: white;
-            border-radius: 24px;
-            transition: 0.25s;
-        }
-
-        .box input[type="submit"] {
-            border: 0;
-            background: none;
-            display: block;
-            margin: 5% auto;
-            text-align: center;
-            border: 2px solid #2ecc71;
-            padding: 2% 8%;
-            outline: none;
-            color: white;
-            border-radius: 24px;
-            transition: 0.25s;
-            cursor: pointer;
-        }
-
-        .box input[type="submit"]:hover {
-            background: #2ecc71;
-        }
-            
-        }
-
-        .box input[type="email"]:focus,
-        .box input[type="password"]:focus {
-            width: 90%;
-            border-color: #2ecc71;
-        }
-
-        .box input[type="email"],
-        .box input[type="password"] {
-            border: 0;
-            background: none;
-            display: block;
-            margin: 5% auto;
-            text-align: center;
-            border: 2px solid #3498db;
-            padding: 8% 3%;
-            width: 80%;
-            outline: none;
-            color: white;
-            border-radius: 24px;
-            transition: 0.25s;
-        }
-
-        .box input[type="submit"] {
-            border: 0;
-            background: none;
-            display: block;
-            margin: 10% auto;
-            text-align: center;
-            border: 2px solid #2ecc71;
-            padding: 3% 10%;
-            outline: none;
-            color: white;
-            border-radius: 24px;
-            transition: 0.25s;
-            cursor: pointer;
-        }
-
-        .box input[type="submit"]:hover {
-            background: #2ecc71;
-        }
-
-        .logo {
-
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            position: fixed;
-            top: 5%;
-        }
-        @media screen and (max-height: 500px){
-            .logo {
-
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            position: fixed;
-            top: 5%;
-            }
-            #container {
-            height: 80%;
-            width: 50%;
-            background-color: rgba(255, 255, 255, 0.2);
-            align-items: center;
-            display: flex;
-            justify-content: center;
-            position: fixed;
-            top: 15%;
-            border-radius: 20px;
-            padding-top: 0%;
-            padding-bottom: 2%;
-            margin-bottom: 2%;
+       @media screen and (max-width: 600px) {
+        #writ{
             font-size: 8px;
         }
-        .box input[type="email"]:focus,
-        .box input[type="password"]:focus {
-            width: 90%;
-            border-color: #2ecc71;
-        }
+           .logo {
 
-        .box input[type="email"],
-        .box input[type="password"] {
-            border: 0;
-            background: none;
-            display: block;
-            /* margin:5% ; */
-            text-align: center;
-            border: 2px solid #3498db;
-            /* padding: 6% 2%; */
-            width: 80%;
-            height: 10px;
-            
-            outline: none;
-            color: white;
-            border-radius: 24px;
-            transition: 0.25s;
-        }
+           width: 50px;
+           height: 50px;
+           border-radius: 50%;
+           position: fixed;
+           top: 5%;
+           }
+           #container {
+           height: 80%;
+           width: 50%;
+           background-color: rgba(255, 255, 255, 0.2);
+           align-items: center;
+           display: flex;
+           justify-content: center;
+           position: fixed;
+           top: 15%;
+           border-radius: 20px;
+           padding-bottom: 2%;
+           margin-bottom: 2%;
+       }
+       .box input[type="email"]:focus,
+       .box input[type="password"]:focus {
+           width: 90%;
+           border-color: #2ecc71;
+       }
 
-        .box input[type="submit"] {
-            border: 0;
-            background: none;
-            display: block;
-            /* margin: 5% auto; */
-            text-align: center;
-            border: 2px solid #2ecc71;
-            /* padding: 2% 8%; */
-            outline: none;
-            color: white;
-            border-radius: 24px;
-            transition: 0.25s;
-            cursor: pointer;
-            height: 15px;
-            font-size: 5px;
-        }
+       .box input[type="email"],
+       .box input[type="password"] {
+           border: 0;
+           background: none;
+           display: block;
+           margin:5% ;
+           text-align: center;
+           border: 2px solid #3498db;
+           padding: 6% 2%;
+           width: 80%;
+           outline: none;
+           color: white;
+           border-radius: 24px;
+           transition: 0.25s;
+       }
 
-        .box input[type="submit"]:hover {
-            background: #2ecc71;
+       .box input[type="submit"] {
+           border: 0;
+           background: none;
+           display: block;
+           /* margin: 5% auto; */
+           text-align: center;
+           border: 2px solid #2ecc71;
+           /* padding: 2% 8%; */
+           outline: none;
+           color: white;
+           border-radius: 24px;
+           transition: 0.25s;
+           cursor: pointer;
+       }
+
+       .box input[type="submit"]:hover {
+           background: #2ecc71;
+       }
+           
+       }
+
+       .box input[type="email"]:focus,
+       .box input[type="password"]:focus {
+           width: 100%;
+           border-color: #2ecc71;
+       }
+
+       .box input[type="email"],
+       .box input[type="password"] {
+           border: 0;
+           background: none;
+           display: block;
+           margin: 5% auto;
+           text-align: center;
+           border: 2px solid #3498db;
+           padding: 5% 2%;
+           width: 90%;
+           outline: none;
+           color: white;
+           border-radius: 24px;
+           transition: 0.25s;
+       }
+
+       .box input[type="submit"] {
+           border: 0;
+           background: none;
+           display: block;
+           margin: 10% auto;
+           text-align: center;
+           border: 2px solid #2ecc71;
+           padding: 3% 10%;
+           outline: none;
+           color: white;
+           border-radius: 24px;
+           transition: 0.25s;
+           cursor: pointer;
+       }
+
+       .box input[type="submit"]:hover {
+           background: #2ecc71;
+       }
+
+       .logo {
+
+           width: 100px;
+           height: 100px;
+           border-radius: 50%;
+           position: fixed;
+           top: 5%;
+       }
+       @media screen and (max-height: 500px){
+           .logo {
+
+           width: 80px;
+           height: 80px;
+           border-radius: 50%;
+           position: fixed;
+           top: 5%;
+           }
+           #container {
+           height: 80%;
+           width: 50%;
+           background-color: rgba(255, 255, 255, 0.2);
+           align-items: center;
+           display: flex;
+           justify-content: center;
+           position: fixed;
+           top: 15%;
+           border-radius: 20px;
+           padding-top: 0%;
+           padding-bottom: 2%;
+           margin-bottom: 2%;
+           font-size: 8px;
+       }
+       .box input[type="email"]:focus,
+       .box input[type="password"]:focus {
+           width: 90%;
+           border-color: #2ecc71;
+       }
+
+       .box input[type="email"],
+       .box input[type="password"] {
+           border: 0;
+           background: none;
+           display: block;
+           /* margin:5% ; */
+           text-align: center;
+           border: 2px solid #3498db;
+           /* padding: 6% 2%; */
+           width: 80%;
+           height: 10px;
+           
+           outline: none;
+           color: white;
+           border-radius: 24px;
+           transition: 0.25s;
+       }
+
+       .box input[type="submit"] {
+           border: 0;
+           background: none;
+           display: block;
+           /* margin: 5% auto; */
+           text-align: center;
+           border: 2px solid #2ecc71;
+           /* padding: 2% 8%; */
+           outline: none;
+           color: white;
+           border-radius: 24px;
+           transition: 0.25s;
+           cursor: pointer;
+           height: 15px;
+           font-size: 5px;
+       }
+
+       .box input[type="submit"]:hover {
+           background: #2ecc71;
+       }
+       #writ{
+            font-size: 8px;
         }
-        }
-    </style>
+       }
+       
+   </style>
 </body>
 
 </html>

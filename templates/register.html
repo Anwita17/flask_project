@@ -33,7 +33,7 @@
                     <label for="confirmPassword1"  style="color: white;">Confirm Password</label>
                     <input required type="password" name="cpass" class="form-control" id="confirmPassword1">
                     {% if msg %}
-                        <span style="color: tomato; font-size: 20px;">{{msg}}</span>
+                        <span id="writ" >{{msg}}</span>
                     {% endif %}
 
                 </div>
@@ -48,6 +48,10 @@
     <!-- <script type="text/javascript" src="app.js"></script> -->
     <script src="{{url_for('static', filename='app.js')}}"></script>
     <style>
+        #writ{
+            color: tomato; 
+            font-size: 20px;
+        }
          body {
             margin: 0;
             padding: 0;
@@ -283,6 +287,9 @@
 
         .box input[type="submit"]:hover {
             background: #2ecc71;
+        }
+        #writ{
+            font-size: 8px;
         }
         }
         
