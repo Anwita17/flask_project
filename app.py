@@ -15,31 +15,24 @@ import pyrebase
 from flask_apscheduler import APScheduler
 from celery import Celery
 from apscheduler.schedulers.blocking import BlockingScheduler
+import configuration
+import mail_config
 
-config={
-    "apiKey": "AIzaSyDVlVnZHhNYlMD5ZXRf4mZQDpj9wWypcpI",
-    "authDomain": "pcount-users.firebaseapp.com",
-    "projectId": "pcount-users",
-    "databaseURL":"",
-    "storageBucket": "pcount-users.appspot.com",
-    "messagingSenderId": "51521810156",
-    "appId": "1:51521810156:web:9e9954f2b7c5c768aaffc9",
-    "measurementId": "G-PN455M9936"
-}
 logging.basicConfig(level=logging.DEBUG)
-firebase = pyrebase.initialize_app(config)
+firebase = pyrebase.initialize_app(configuration.BaseConfig.firebase_config)
 auth = firebase.auth()
 app = Flask(__name__)
-app.secret_key="fdsfsdafsdfdsfn,dsfmnas,thisshouldbethewierdestsecretkeypossible"
+app.secret_key=configuration.BaseConfig.secret_key
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///p_count.db'
-app.config['SQLALCHEMY_BINDS']={'two':'sqlite:///task.db'}
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+app.config['SQLALCHEMY_DATABASE_URI'] = configuration.BaseConfig.SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_BINDS']=configuration.BaseConfig.SQLALCHEMY_BINDS
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=configuration.BaseConfig.SQLALCHEMY_TRACK_MODIFICATIONS
+
 db = SQLAlchemy(app)
 mail = Mail(app) # instantiate the mail class
-UPLOAD_FOLDER = './Uploader'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER 
+
+app.config['UPLOAD_FOLDER'] = configuration.BaseConfig.UPLOAD_FOLDER 
 
 scheduler = APScheduler()
 # if you don't wanna use a config, you can set options here:
@@ -49,10 +42,10 @@ scheduler.start()
 
 
 # configuration of mail
-app.config['MAIL_SERVER']='smtp-mail.outlook.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'anonymousanwitashobhit@outlook.com'
-app.config['MAIL_PASSWORD'] = 'Anonymous22'
+app.config['MAIL_SERVER']=mail_config.mail_conf.MAIL_SERVER
+app.config['MAIL_PORT'] = mail_config.mail_conf.MAIL_PORT
+app.config['MAIL_USERNAME'] = mail_config.mail_conf.MAIL_USERNAME
+app.config['MAIL_PASSWORD'] = mail_config.mail_conf.MAIL_PASSWORD
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
@@ -77,7 +70,7 @@ class User(db.Model):
 
 class Task(db.Model):
     __bind_key__='two'
-    sno=db.Column(db.Integer,autoincrement=True,primary_key=True)
+    sno=db.Column(db.Integer,primary_key=True)
     title=db.Column(db.String(80))
     desc=db.Column(db.String(200))
     usr_nm=db.Column(db.String(80))
@@ -85,6 +78,12 @@ class Task(db.Model):
     time_rem=db.Column(db.String(80))
 
 def snd_mail():
+    '''
+    Function for sending mail
+
+    Returns:
+    String: The name of page to which it needs to be redirected.
+    '''
     comm_email=['gmail.com','outlook.com','yahoo.com','hotmail.com','rediff.com']
     eid=str(request.form.get('email'))
     edomain=eid.split('@')
@@ -98,12 +97,12 @@ def snd_mail():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
         # print(request.form.get('subject'))
-        msg = Message(subject = request.form.get('subject'), body = request.form.get('body'), sender = "anonymousanwitashobhit@outlook.com", recipients = [request.form.get('email')])  
+        msg = Message(subject = request.form.get('subject'), body = request.form.get('body'), sender = mail_config.mail_conf.MAIL_USERNAME, recipients = [request.form.get('email')])  
 
         with app.open_resource('Uploader/'+filename) as fp:  
             msg.attach(filename,"application/vnd.ms-excel",fp.read())  
         mail.send(msg)
-        return "index"
+        return configuration.HtmlConfig.index_html
     except:
         return "email"
     
@@ -112,6 +111,14 @@ def snd_mail():
 
 
 def upload_file():
+        '''
+        Function for uploading the excel file data into the database.
+        The data is then converted into dictionary which is then converted to dataframe to remove unnecessary rows and
+        uploaded to database.
+
+        Returns:
+        String: The name of page to which it needs to be redirected.
+        '''
         try:
             xlsx_file = request.files['file']
             data_xls = pd.read_excel(xlsx_file,'Overview',usecols="A:G")
@@ -133,7 +140,7 @@ def upload_file():
             month=month_ar[int(ar[1])-1]
             for value in db.session.query(User.month,User.year).distinct():
                 if(month==value[0] and year==value[1]):
-                    return "upload"
+                    return configuration.HtmlConfig.upload_html
 
 
             # print(mon)
@@ -147,31 +154,37 @@ def upload_file():
                 month=month,year=year)
                 db.session.add(user)
                 db.session.commit()
-            return "index"
+            return configuration.HtmlConfig.index_html
         except:
             return "error"
 
 
-@app.route('/home', methods=['GET', 'POST'])
+@app.route(configuration.PageConfig.home_page, methods=['GET', 'POST'])
 def index():
+    '''
+    Function that checks which form is submitted and takes appropriate actions according to it.
+
+    Returns:
+    String: The name of page to which it needs to be redirected along with a message 
+    '''
     try:
         x=session['user_id']
         
-        val="index"
+        val=configuration.HtmlConfig.index_html
         msg=""
         if request.method == 'POST':
             
             if 'sm' in request.form: 
                 val=snd_mail()
                 if val=="email":
-                    val="send_mail"
+                    val=configuration.HtmlConfig.send_mail_html
                     msg="Message cannot be delivered to this domain!"
             if 'up' in request.form:
                 val=upload_file()
-                if(val=="upload"):
+                if(val==configuration.HtmlConfig.upload_html):
                     msg="Sorry the file for this month already exists!"
                 if(val=="error"):
-                    val="upload"
+                    val=configuration.HtmlConfig.upload_html
                     msg="Incorrect type of file uploaded. Please check and upload!"
             
             
@@ -180,10 +193,17 @@ def index():
         return render_template(val+".html",msg=msg)
     except KeyError:
         flask.flash('Please Login before proceeding')
-        return redirect(url_for('login'))
+        return redirect(url_for(configuration.HtmlConfig.login_html))
 
-@app.route('/view_details',methods=['GET','POST'])
+
+@app.route(configuration.PageConfig.details_page,methods=['GET','POST'])
 def details():
+    '''
+    Function for viewing the patching count details of the particular month chosen by the user.
+
+    Returns:
+    String: The name of page to which it needs to be redirected along with the details of the query.
+    '''
     try:
         # print(session['email'])
         x=session['user_id']
@@ -214,54 +234,73 @@ def details():
                         vcompleted.append(var.total_completed)
                         vrem.append(var.total_rem)
                     sum_r=sum_a-sum_c
-                    return render_template("view_details.html",details=details,month=month,year=year,assigned=sum_a,completed=sum_c,remaining=sum_r,
+                    return render_template(configuration.HtmlConfig.view_details_html+".html",details=details,month=month,year=year,assigned=sum_a,completed=sum_c,remaining=sum_r,
                                         vname=vname,vassigned=vassigned,vcompleted=vcompleted,vrem=vrem)
         
         else:
-            return render_template("view_details.html")
+            return render_template(configuration.HtmlConfig.view_details_html+".html")
     except KeyError:
         flask.flash('Please Login before proceeding')
-        return redirect(url_for('login'))
+        return redirect(url_for(configuration.HtmlConfig.login_html))
 
 
-@app.route('/upload',methods=['GET', 'POST'])
+@app.route(configuration.PageConfig.upload_page,methods=['GET', 'POST'])
 def upload():
+    '''
+    Function for rendering the upload page.
+
+    Returns:
+    String: The name of page to which it needs to be redirected.
+    '''
     try:
         
         x=session['user_id']
         if request.method == 'POST':    
-            return redirect(url_for('/home'))
+            return redirect(url_for(configuration.PageConfig.home_page))
             
-        return render_template("upload.html")
+        return render_template(configuration.HtmlConfig.upload_html+".html")
     except KeyError:
         flask.flash('Please Login before proceeding')
-        return redirect(url_for('login'))
+        return redirect(url_for(configuration.HtmlConfig.login_html))
 
 
-@app.route('/send_mail',methods=['GET', 'POST'])
+@app.route(configuration.PageConfig.send_mail_page,methods=['GET', 'POST'])
 def send_mail():
+    '''
+    Function for rendering the send email page.
+
+    Returns:
+    String: The name of page to which it needs to be redirected.
+    '''
     try:
         x=session['user_id']
         if request.method == 'POST':    
-            return redirect(url_for('/home'))
-        return render_template("send_mail.html")
+            return redirect(url_for(configuration.PageConfig.home_page))
+        return render_template(configuration.HtmlConfig.send_mail_html+".html")
     except KeyError:
         flask.flash('Please Login before proceeding')
-        return redirect(url_for('login'))
+        return redirect(url_for(configuration.HtmlConfig.login_html))
 
-@app.route('/',methods=['GET','POST'])
+@app.route(configuration.PageConfig.login_page,methods=['GET','POST'])
 def login():
+    '''
+    Function for setting the user session if the user already exists.
+    
+
+    Returns:
+    String: The name of page to which it needs to be redirected.
+    '''
     if request.method == 'POST':
             if 'logout' in request.form:
                 session.pop('user_id',None)
                 session.pop('email',None)
-                return redirect(url_for('login'))
+                return redirect(url_for(configuration.HtmlConfig.login_html))
     email_id=""
-    val="login"
+    val=configuration.HtmlConfig.login_html
     msg=""
     try:
         x=session['user_id']
-        return redirect(url_for('index'))
+        return redirect(url_for(configuration.HtmlConfig.index_html))
     except KeyError:
         if request.method == 'POST':
             user=request.form.get('email')
@@ -272,35 +311,22 @@ def login():
                 account_info=auth.get_account_info(user_info['idToken'])
                 session['email']=account_info['users'][0]['email']
                 session['user_id']=user_info['idToken']
-                return redirect(url_for('index'))
+                return redirect(url_for(configuration.HtmlConfig.index_html))
             except:
                 msg="Incorrect Password!"
-            if 'rg' in request.form:    
-                user=request.form.get("email")
-                password=request.form.get("pass")
-                cpassword=request.form.get("cpass")
-                # print(1)
-                if password != cpassword:
-                    # print(password)
-                    val="register"
-                    msg="Passwords do not match!"
-                else:
-                    try:
-                        new_user=auth.create_user_with_email_and_password(user,password)
-
-                    except Exception as e:
-                        val="register"
-                        if "WEAK_PASSWORD" in str(e):
-                            msg="Weak Password!"
-                        else:
-                            msg="User Already Exists!"
-
-        
         return render_template(val+".html",msg=msg)
 
-@app.route('/register',methods=['GET','POST'])
+@app.route(configuration.PageConfig.register_page,methods=['GET','POST'])
 def register():
-    val="register"
+    '''
+    Function for registering the user.
+    If new user is registering it checks if the password and confirm password matches or not.If it matches ,
+    then it registers the user in the firebase server.
+
+    Returns:
+    String: The name of page to which it needs to be redirected.
+    '''
+    val=configuration.HtmlConfig.register_html
     msg=""
     if request.method == 'POST':
         if 'rg' in request.form:    
@@ -314,11 +340,11 @@ def register():
                 else:
                     try:
                         new_user=auth.create_user_with_email_and_password(user,password)
-                        val="login"
+                        val=configuration.HtmlConfig.login_html
                         msg="User successfully registered!"
 
                     except Exception as e:
-                        val="register"
+                        val=configuration.HtmlConfig.register_html
                         if "WEAK_PASSWORD" in str(e):
                             msg="Weak Password!"
                         else:
@@ -326,31 +352,22 @@ def register():
         # return redirect(url_for('/'))
     return render_template(val+".html",msg=msg)
 
-def mail_reminder(title,desc):
-    comm_email=['gmail.com','outlook.com','yahoo.com','hotmail.com','rediff.com']
-    eid=session['email']
-    edomain=eid.split('@')
-    try:
-        if edomain[1] not in comm_email:
-            
-            raise "email"
-        msg = Message(subject = title, body = desc, sender = "anonymousanwitashobhit@outlook.com", recipients = [eid])  
-        mail.send(msg)
-        
-    except:
-        pass
     
+c=1
 
-    
-c=0
-job_list=[]
 
-@app.route('/set_reminder',methods=['GET','POST'])
+@app.route(configuration.PageConfig.set_reminder_page,methods=['GET','POST'])
 def set_reminder():
+    '''
+    Function for setting the reminder using APScheduler and adding the reminder to the database.
+
+    Returns:
+    String: The name of page to which it needs to be redirected.
+    '''
     try:
+        global c
         x=session['user_id']
         msg=""
-        global job_list
         if request.method == 'POST':
             title=request.form.get('title')
             desc=request.form.get('desc')
@@ -359,58 +376,73 @@ def set_reminder():
             d_list=date_1.split("-")
             t_list=time_1.split(':')
             eid=session['email']
-            task = Task(title=title, desc=desc,usr_nm=eid,date_rem=date_1,time_rem=time_1)
+            task = Task(sno=c,title=title, desc=desc,usr_nm=eid,date_rem=date_1,time_rem=time_1)
             db.session.add(task)
             db.session.commit()
-            @scheduler.task('cron',day=d_list[2],month=d_list[1],year=d_list[0],hour=t_list[0],minute=t_list[1])
+            c=c+1
+            @scheduler.task('cron',id=str(c-1),day=d_list[2],month=d_list[1],year=d_list[0],hour=t_list[0],minute=t_list[1])
             def job1():
+                global c
                 with app.test_request_context():
-                    comm_email=['gmail.com','outlook.com','yahoo.com','hotmail.com','rediff.com']
-                    edomain=eid.split('@')
                     try:
-                        if edomain[1] not in comm_email:
-                            raise "email"
-                        msg = Message(subject = title, body = desc, sender = "anonymousanwitashobhit@outlook.com", recipients = [eid])  
-                        print('hello')
+                        
+                        details=Task.query.filter_by(date_rem=date_1,time_rem=time_1,usr_nm=eid).first()
+                        db.session.delete(details)
+                        db.session.commit()
+                        msg = Message(subject = title, body = desc, sender = mail_config.mail_conf.MAIL_USERNAME, recipients = [eid])  
+                        mail.send(msg)
+                        
+                        
                         app.logger.info('Mail sent')                    
-                    except:
-                        pass
-
-            mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-            date_str=str(mon[int(d_list[1])-1])+" "+str(d_list[2])+" "+str(d_list[0])
-            datetime_object = datetime.strptime(date_str+" "+str(time_1), '%b %d %Y %H:%M')
-            x= datetime_object-datetime.now()
-            print(x)
-            global mail
+                    except Exception as e:
+                        print(e)
             
             msg="Reminder Set Successfully!"    
-        return render_template('set_reminder.html',msg=msg)
+        return render_template(configuration.HtmlConfig.set_reminder_html+'.html',msg=msg)
     except KeyError:
         flash('Please Login before proceeding')
-        return redirect(url_for('login'))
-
-# @sched.scheduled_job('cron',day=d_list[2],month=d_list[1],year=d_list[0],hour=t_list[0],minute=t_list[1])
+        return redirect(url_for(configuration.HtmlConfig.login_html))
 
 
 
-@app.route('/view_reminder',methods=['GET','POST'])
+@app.route(configuration.PageConfig.view_reminder_page,methods=['GET','POST'])
 def view_reminder():
+    '''
+    Function to render the view reminder page and filtering the reminder according to the session of the user.
+
+    Returns:
+    String: The name of page to which it needs to be redirected.
+    '''
     try:
         x=session['user_id']
         details=Task.query.filter_by(usr_nm=session['email'])
-        return render_template('view_reminder.html',details=details)
+        return render_template(configuration.HtmlConfig.view_reminder_html+'.html',details=details)
     except KeyError:
         flash('Please Login before proceeding')
-        return redirect(url_for('login'))
+        return redirect(url_for(configuration.HtmlConfig.login_html))
 
-@app.route('/delete/<int:sno>')
+@app.route(configuration.PageConfig.delete_page)
 def delete(sno):
-    task=Task.query.filter_by(sno=sno).first()
-    db.session.delete(task)
-    db.session.commit()
-    return redirect(url_for('view_reminder'))
+    '''
+    Function for deleting a task from the database by its primary key
+
+    Returns:
+    String: The name of page to which it needs to be redirected.
+    '''
+    try:
+        task=Task.query.filter_by(sno=sno).first()
+        db.session.delete(task)
+        db.session.commit()
+        scheduler.delete_job(id=str(sno))
+    except:
+        pass
+    return redirect(url_for(configuration.HtmlConfig.view_reminder_html))
 
 
 if __name__ == "__main__":
+    '''
+    Main Function from where execution begins
+    
+    '''
     db.create_all()
     app.run(debug=True)
