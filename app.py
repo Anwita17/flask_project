@@ -13,7 +13,6 @@ import sys
 from datetime import datetime,timedelta,date
 import pyrebase
 from flask_apscheduler import APScheduler
-from celery import Celery
 from apscheduler.schedulers.blocking import BlockingScheduler
 import configuration
 import mail_config

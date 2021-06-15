@@ -15,7 +15,7 @@
 
     <div id="particles-js">
 
-        <div id="container">
+        <div id="container" >
             <img class="logo" src="../static/logo.png">
             <form class='box' action="/" method="POST">
                 <div class="mb-3">
@@ -103,23 +103,65 @@
             display: flex;
             justify-content: center;
             position: fixed;
-            top: 20%;
+            top: 15%;
             border-radius: 20px;
             padding-bottom: 2%;
+            margin-bottom: 2%;
         }
 
-        @media screen and (max-width: 800px) {
+        @media screen and (max-width: 600px) {
             #container {
-            height: 70%;
+            height: 80%;
             width: 50%;
             background-color: rgba(255, 255, 255, 0.2);
             align-items: center;
             display: flex;
             justify-content: center;
             position: fixed;
-            top: 20%;
+            top: 15%;
             border-radius: 20px;
             padding-bottom: 2%;
+            margin-bottom: 2%;
+        }
+        .box input[type="email"]:focus,
+        .box input[type="password"]:focus {
+            width: 90%;
+            border-color: #2ecc71;
+        }
+
+        .box input[type="email"],
+        .box input[type="password"] {
+            border: 0;
+            background: none;
+            display: block;
+            margin:5% ;
+            text-align: center;
+            border: 2px solid #3498db;
+            padding: 6% 2%;
+            width: 80%;
+            outline: none;
+            color: white;
+            border-radius: 24px;
+            transition: 0.25s;
+        }
+
+        .box input[type="submit"] {
+            border: 0;
+            background: none;
+            display: block;
+            margin: 5% auto;
+            text-align: center;
+            border: 2px solid #2ecc71;
+            padding: 2% 8%;
+            outline: none;
+            color: white;
+            border-radius: 24px;
+            transition: 0.25s;
+            cursor: pointer;
+        }
+
+        .box input[type="submit"]:hover {
+            background: #2ecc71;
         }
             
         }
@@ -135,7 +177,7 @@
             border: 0;
             background: none;
             display: block;
-            margin: 20px auto;
+            margin: 5% auto;
             text-align: center;
             border: 2px solid #3498db;
             padding: 8% 3%;
@@ -171,7 +213,76 @@
             height: 100px;
             border-radius: 50%;
             position: fixed;
-            top: 10%;
+            top: 5%;
+        }
+        @media screen and (max-height: 500px){
+            .logo {
+
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: fixed;
+            top: 5%;
+            }
+            #container {
+            height: 80%;
+            width: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            top: 15%;
+            border-radius: 20px;
+            padding-top: 0%;
+            padding-bottom: 2%;
+            margin-bottom: 2%;
+            font-size: 8px;
+        }
+        .box input[type="email"]:focus,
+        .box input[type="password"]:focus {
+            width: 90%;
+            border-color: #2ecc71;
+        }
+
+        .box input[type="email"],
+        .box input[type="password"] {
+            border: 0;
+            background: none;
+            display: block;
+            /* margin:5% ; */
+            text-align: center;
+            border: 2px solid #3498db;
+            /* padding: 6% 2%; */
+            width: 80%;
+            height: 10px;
+            
+            outline: none;
+            color: white;
+            border-radius: 24px;
+            transition: 0.25s;
+        }
+
+        .box input[type="submit"] {
+            border: 0;
+            background: none;
+            display: block;
+            /* margin: 5% auto; */
+            text-align: center;
+            border: 2px solid #2ecc71;
+            /* padding: 2% 8%; */
+            outline: none;
+            color: white;
+            border-radius: 24px;
+            transition: 0.25s;
+            cursor: pointer;
+            height: 15px;
+            font-size: 5px;
+        }
+
+        .box input[type="submit"]:hover {
+            background: #2ecc71;
+        }
         }
     </style>
 </body>
