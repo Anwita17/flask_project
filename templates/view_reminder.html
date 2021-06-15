@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{%block title%} View Reminder {%endblock%}
+{% block body %}
+
+<div style="padding: 5%;">
+    {% if not details.first() %}
+        <div class="alert alert-danger" role="alert"><strong>No tasks to display! </strong></div>
+    {% else %}
+    <h1>Your Tasks</h1><br>
+    <table class="table table-dark table-striped">
+        <thead>
+          <tr >
+            <th scope="col">Sno</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for value in details %}
+              <tr  >
+                <th scope="row">{{loop.index}}</th>
+                <td>{{value.title}}</td>
+                <td>{{value.desc}}</td>
+                <td>{{value.date_rem}}</td>
+                <td>{{value.time_rem}}</td>
+                <td><a href="/delete/{{value.sno}}" type="button" class="btn btn-outline-dark btn-sm mx-1" style="color:white; border-color:white;">Delete</button></td>
+              </tr>
+            
+          
+          {% endfor %}
+        </tbody>
+      </table>
+            
+    {% endif %}
+    
+
+</div>
+
+
+
+
+
+
+
+
+{% endblock body %}
