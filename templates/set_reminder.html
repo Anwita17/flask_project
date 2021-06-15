@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{%block title%} Set Reminder {%endblock%}
+{% block body %}
+<div class="tab-content">
+    <div id="mail" class="container tab-pane active"><br>
+        <form action="/set_reminder" method="POST">
+            {% if msg %}
+            <div  class="alert alert-success" role="alert" style="text-align: center;">{{ msg }}</div>
+            {% endif %}
+            
+
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Title</label>
+                <input required type="text" class="form-control" id="title" name='title' aria-describedby="emailHelp">
+
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Desciption</label>
+                <textarea required name="desc" class="form-control" id="desc" rows="3"></textarea>
+            </div>
+            <div class="mb-3" style="margin-top:3%">
+                <span style="margin-right: 20% ;">
+                    <label for="exampleInputEmail1" class="form-label">Set Date &nbsp; &nbsp;&nbsp; </label>
+                    <input required type="date" id="date" style="width: 20%;height: 20%;" name="date"
+                        aria-describedby="emailHelp">
+                </span>
+                <span style="margin-top:5% ; margin-left:5% ;">
+                    <label for="exampleInputEmail1" class="form-label">Set Time &nbsp;&nbsp;&nbsp; </label>
+                    <input required type="time" id="title" style="width: 20%;height: 20%;" name="time"
+                        aria-describedby="emailHelp">
+                </span>
+            </div>
+
+
+            <div class="d-grid gap-2 col-4 mx-auto" style="margin-top: 10%;">
+                <button type="submit" class="btn btn-outline-primary" name="reminder">Add
+                    Reminder</button>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+<style>
+    .btn-outline-primary {
+        border-color: #000066;
+        color: #000066;
+        border-radius: 20px;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #000066;
+        color: white;
+    }
+</style>
+
+
+
+
+
+{% endblock body %}
