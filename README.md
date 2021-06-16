@@ -89,5 +89,19 @@ pip install flask_apscheduler
 ```
 
 
+### Installation
+1. Clone the repo:
+   ```sh
+   git clone https://github.com/Anwita17/flask_project.git
+   ```
+2. Run the cmd using the command:
+   ```sh
+   python app.py
+   ```
 
+## Usage
 
+This app is used by DBA for their convenience for viewing the data instead of using the traditional excel sheets.
+
+* Here a new user can register or an old user can login:
+  ![Image of Yaktocat](https://github.com/Anwita17/flask_project/blob/master/login_img.jpeg)
