@@ -13,6 +13,7 @@ import sys
 from datetime import datetime,timedelta,date
 import pyrebase
 from flask_apscheduler import APScheduler
+from celery import Celery
 from apscheduler.schedulers.blocking import BlockingScheduler
 import configuration
 import mail_config
@@ -69,7 +70,7 @@ class User(db.Model):
 
 class Task(db.Model):
     __bind_key__='two'
-    sno=db.Column(db.Integer,primary_key=True)
+    sno=db.Column(db.Integer,autoincrement=True,primary_key=True)
     title=db.Column(db.String(80))
     desc=db.Column(db.String(200))
     usr_nm=db.Column(db.String(80))
@@ -352,9 +353,9 @@ def register():
     return render_template(val+".html",msg=msg)
 
     
+
+
 c=1
-
-
 @app.route(configuration.PageConfig.set_reminder_page,methods=['GET','POST'])
 def set_reminder():
     '''
@@ -375,28 +376,34 @@ def set_reminder():
             d_list=date_1.split("-")
             t_list=time_1.split(':')
             eid=session['email']
-            task = Task(sno=c,title=title, desc=desc,usr_nm=eid,date_rem=date_1,time_rem=time_1)
-            db.session.add(task)
-            db.session.commit()
-            c=c+1
-            @scheduler.task('cron',id=str(c-1),day=d_list[2],month=d_list[1],year=d_list[0],hour=t_list[0],minute=t_list[1])
-            def job1():
-                global c
-                with app.test_request_context():
-                    try:
-                        
-                        details=Task.query.filter_by(date_rem=date_1,time_rem=time_1,usr_nm=eid).first()
-                        db.session.delete(details)
-                        db.session.commit()
-                        msg = Message(subject = title, body = desc, sender = mail_config.mail_conf.MAIL_USERNAME, recipients = [eid])  
-                        mail.send(msg)
-                        
-                        
-                        app.logger.info('Mail sent')                    
-                    except Exception as e:
-                        print(e)
+            mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+            date_str=str(mon[int(d_list[1])-1])+" "+str(d_list[2])+" "+str(d_list[0])
+            datetime_object = datetime.strptime(date_str+" "+str(time_1), '%b %d %Y %H:%M')
+            if datetime.now()<datetime_object:
+                task = Task(title=title, desc=desc,usr_nm=eid,date_rem=date_1,time_rem=time_1)
+                db.session.add(task)
+                db.session.commit()
+                usr_id=Task.query.filter_by(date_rem=date_1,time_rem=time_1,usr_nm=eid).first()
+                @scheduler.task('cron',id=str(usr_id.sno),day=d_list[2],month=d_list[1],year=d_list[0],hour=t_list[0],minute=t_list[1])
+                def job1():
+                    global c
+                    with app.test_request_context():
+                        try:
+                            
+                            details=Task.query.filter_by(date_rem=date_1,time_rem=time_1,usr_nm=eid).first()
+                            db.session.delete(details)
+                            db.session.commit()
+                            msg = Message(subject = title, body = desc, sender = mail_config.mail_conf.MAIL_USERNAME, recipients = [eid])  
+                            mail.send(msg)
+                            
+                            
+                            app.logger.info('Mail sent')                    
+                        except Exception as e:
+                            print(e)
             
-            msg="Reminder Set Successfully!"    
+                msg="Reminder Set Successfully!"   
+            else:
+                msg="Please set a proper time!" 
         return render_template(configuration.HtmlConfig.set_reminder_html+'.html',msg=msg)
     except KeyError:
         flash('Please Login before proceeding')
@@ -433,8 +440,8 @@ def delete(sno):
         db.session.delete(task)
         db.session.commit()
         scheduler.delete_job(id=str(sno))
-    except:
-        pass
+    except Exception as e:
+        print(e)
     return redirect(url_for(configuration.HtmlConfig.view_reminder_html))
 
 
