@@ -26,7 +26,7 @@
 </details>
 
 ## About the Project
-![Image of Yaktocat](https://github.com/Anwita17/flask_project/blob/master/about.jpg)
+![Home](https://github.com/Anwita17/flask_project/blob/master/about.jpg)
 
 
 
@@ -104,4 +104,24 @@ pip install flask_apscheduler
 This app is used by DBA for their convenience for viewing the data instead of using the traditional excel sheets.
 
 * Here a new user can register or an old user can login:
-  ![Image of Yaktocat](https://github.com/Anwita17/flask_project/blob/master/login_img.jpeg)
+  ![Login](https://github.com/Anwita17/flask_project/blob/master/login_img.jpeg)
+  
+  
+* Here the user can view the patching-count details for a particular month and download the report:
+  ![ViewDetails](https://github.com/Anwita17/flask_project/blob/master/View_details_img.png)
+  
+  
+* Here the user can upload the appropriate type of excel/csv file:
+  ![Upload](https://github.com/Anwita17/flask_project/blob/master/upload_img.jpeg)
+  
+  
+* Here the user can send email to the required person without logging into the user's personal mail:
+  ![SendEmail](https://github.com/Anwita17/flask_project/blob/master/send_mail_img.jpeg)
+  
+  
+* Here the user can set the email reminder for himself/herself for a particular event:
+  ![Upload](https://github.com/Anwita17/flask_project/blob/master/add_rem_img.jpeg)
+  
+  
+* Here the user can view the list of his/her reminders:
+  ![Upload](https://github.com/Anwita17/flask_project/blob/master/view_rem_img.jpeg)
