@@ -58,5 +58,36 @@ We need to install the following modules in order to run this project locally on
 pip install flask
 ```
 
-* Installing Flask_SQLALCHEMY
+* Installing Flask_SQLALCHEMY:
+```sh
+pip install flask_sqlalchemy
+```
+
+* Installing pandas:
+```sh
+pip install pandas
+```
+
+* Installing Flask_mail:
+```sh 
+pip install flask_mail
+```
+
+* Installing pyrebase:
+```sh
+pip install pyrebase
+```
+
+* Installing APScheduler:
+```sh
+pip intsall APScheduler
+```
+
+* Installing Flask_apscheduler:
+```sh
+pip install flask_apscheduler
+```
+
+
+
 
