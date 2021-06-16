@@ -26,7 +26,7 @@
 </details>
 
 ## About the Project
-![Home](https://github.com/Anwita17/flask_project/blob/master/about.jpg)
+![Home](https://github.com/Anwita17/flask_project/blob/master/home_page_img.png)
 
 
 
