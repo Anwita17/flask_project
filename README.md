@@ -19,7 +19,6 @@
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
@@ -69,7 +68,7 @@ pip install pandas
 ```
 
 * Installing Flask_mail:
-```sh 
+```sh F
 pip install flask_mail
 ```
 
@@ -125,3 +124,35 @@ This app is used by DBA for their convenience for viewing the data instead of us
   
 * Here the user can view the list of his/her reminders:
   ![Upload](https://github.com/Anwita17/flask_project/blob/master/view_rem_img.jpeg)
+
+## Roadmap
+
+See the [open issues](https://github.com/Anwita17/flask_project/issues) for a list of proposed features (and known issues).
+
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Contact
+
+Shobhit Gupta -          [linkedin](https://www.linkedin.com/in/shobhit-gupta-0b270215a/) - shobhit00gupta@gmail.com
+
+Anwita Roy Chowdhury -   [linkedin](linkedin.com/in/anwita-roy-chowdhury-8720981a8) - anwita.roychowdhury@gmail.com
+
+Project Link: [https://github.com/Anwita17/flask_project](https://github.com/Anwita17/flask_project)
+
+
+## Acknowledgements
+
+* [Code With Harry](https://www.youtube.com/watch?v=oA8brF3w5XQ&ab_channel=CodeWithHarry)
+* [W3 schools](https://www.w3schools.com/html/)
+* [BootStrap](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+* [Flask](https://flask.palletsprojects.com/)
+* [Firebase](https://firebase.google.com/docs)
