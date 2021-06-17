@@ -144,7 +144,7 @@ Contributions are what make the open source community such an amazing place to b
 
 Shobhit Gupta -          [linkedin](https://www.linkedin.com/in/shobhit-gupta-0b270215a/) - shobhit00gupta@gmail.com
 
-Anwita Roy Chowdhury -   [linkedin](linkedin.com/in/anwita-roy-chowdhury-8720981a8) - anwita.roychowdhury@gmail.com
+Anwita Roy Chowdhury -   [linkedin](https://www.linkedin.com/in/anwita-roy-chowdhury-8720981a8) - anwita.roychowdhury@gmail.com
 
 Project Link: [https://github.com/Anwita17/flask_project](https://github.com/Anwita17/flask_project)
 
