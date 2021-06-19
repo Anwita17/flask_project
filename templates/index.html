@@ -16,7 +16,7 @@
 <body>
     
     <div class="background">
-        <h1 id="text"> Patching Count<br>Generator</h1>
+        <h1 id="text"> Patching Count<br>Generator {{email_id}}</h1>
     </div>
 
     <style>
@@ -63,9 +63,9 @@
             box-shadow: 10px 10px grey;
         }
     </style>
-    <div class="container-fluid" style="padding:2%; margin:5px;">
+    <div class="container-fluid" style="padding:1%; margin:1px;">
         <div class="row ">
-            <div class="col-sm-4 d-flex justify-content-center ">
+            <div class="col-sm-2 d-flex justify-content-center " style="margin: 1.5%;">
                 <div class="card">
                     <img src="static/details_bg.png" class="card-img-top" alt="..."
                         style="height: 12rem;width: 12rem; align-self: center;">
@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4 d-flex justify-content-center ">
+            <div class="col-sm-2 d-flex justify-content-center "style="margin: 1.5%;">
                 <div class="card">
                     <img src="static/upload_bg.jpg" class="card-img-top" alt="..."
                         style="height: 12rem;width: 12rem; align-self: center;">
@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4 d-flex justify-content-center">
+            <div class="col-sm-2 d-flex justify-content-center"style="margin: 1.5%;">
                 <div class="card">
                     <img src="static/mail_bg.png" class="card-img-top" alt="..."
                         style="height: 12rem; width: 12rem; align-self: center;">
@@ -95,6 +95,28 @@
                         <!-- <h5 class="card-title">Send Email</h5>
                         <p class="card-text">Share details of employees</p> -->
                         <a href="send_mail" class="btn btn-primary">Send Email</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 d-flex justify-content-center "style="margin: 1.5%;">
+                <div class="card">
+                    <img src="static/set_r.jpg" class="card-img-top" alt="..."
+                        style="height: 12rem;width: 12rem; align-self: center;">
+                    <div class="card-body">
+                        <!-- <h5 class="card-title">Upload File</h5>
+                        <p class="card-text">Upload monthly excel file</p> -->
+                        <a href="set_reminder" class="btn btn-primary">Set Reminder</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 d-flex justify-content-center "style="margin: 1.5%;">
+                <div class="card">
+                    <img src="static/view_r.jpg" class="card-img-top" alt="..."
+                        style="height: 12rem;width: 12rem; align-self: center;">
+                    <div class="card-body">
+                        <!-- <h5 class="card-title">Upload File</h5>
+                        <p class="card-text">Upload monthly excel file</p> -->
+                        <a href="view_reminder" class="btn btn-primary">View Reminder</a>
                     </div>
                 </div>
             </div>
